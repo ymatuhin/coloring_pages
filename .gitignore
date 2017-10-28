@@ -1,1 +1,10 @@
-node_modules
+# Build results
+dist/
+typings/**/*
+
+# Others
+~$*
+*~
+node_modules/
+src/build/
+coverage/
