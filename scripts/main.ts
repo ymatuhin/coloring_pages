@@ -1,6 +1,6 @@
-import Utils from './Utils';
+//import Utils from './Utils';
 
-new Utils();
+//new Utils();
 var helloWorld = function() : void {
   console.log('Hello World');
 }
