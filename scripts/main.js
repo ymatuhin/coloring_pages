@@ -1,4 +1,4 @@
-var helloWorld = function(): void {
+var helloWorld = function() {
   console.log('Hello World');
 };
 

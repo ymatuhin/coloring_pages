@@ -9,6 +9,5 @@
 			"action": "exclude",
 			"type": "dir"
 		}
-	],
-	"port": 49947
+	]
 }
