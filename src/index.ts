@@ -33,8 +33,10 @@ function fillColor({ x, y }: any) {
   ctx.putImageData(imageData, x, y);
   filled[`${x}:${y}`] = true;
 
-  fillColor({ x: x - 1, y });
-  fillColor({ x: x + 1, y });
-  fillColor({ x, y: y + 1 });
-  fillColor({ x, y: y - 1 });
+  window.requestAnimationFrame(() => {
+    fillColor({ x: x - 1, y });
+    fillColor({ x: x + 1, y });
+    fillColor({ x, y: y + 1 });
+    fillColor({ x, y: y - 1 });
+  });
 }
