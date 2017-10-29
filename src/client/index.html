@@ -9,18 +9,26 @@
         content="width=device-width, initial-scale=1">
 
   <title>
-    Typescript Webpack Starter
+    <%= htmlWebpackPlugin.options.title %>
   </title>
 
   <meta name="description"
-        content="Typescript Webpack Starter">
+        content="<%= htmlWebpackPlugin.options.title %>">
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
   <img id="ouline"
-       src="./src/pic1.jpg"
-       alt="">
+       src="assets/pic1.jpg"
+       alt=""
+       hidden>
   <canvas id="canvas"></canvas>
-<script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="app.bundle.js"></script></body>
+</body>
 
 </html>

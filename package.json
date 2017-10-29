@@ -4,9 +4,9 @@
   "description": "A damn simple starter for Typescript and Webpack",
   "main": "src/index.ts",
   "scripts": {
-    "start": "npm run server:dev",
+    "start": "npm update && npm run server:dev",
     "server": "npm run server:dev",
-    "server:dev": "webpack-dashboard -- webpack-dev-server --config ./webpack.config.js --inline --progress --watch --open --hot",
+    "server:dev": "webpack-dev-server --config ./webpack.config.js --inline --progress --watch --hot",
     "server:prod": "cross-env NODE_ENV=production webpack-dashboard -- webpack-dev-server --config ./webpack.config.js --port 3000 --host 0.0.0.0 --hot --inline --progress --profile --watch --open --content-base dist/",
     "build": "npm run build:dev",
     "build:dev": "webpack --config ./webpack.config.js --progress --profile --color --display-error-details --display-cached",
@@ -24,12 +24,14 @@
   "license": "ISC",
   "devDependencies": {
     "@types/lodash": "^4.14.70",
+    "@types/node": "^8.0.47",
     "awesome-typescript-loader": "^3.2.1",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
     "ejs-loader": "^0.3.0",
     "eslint": "^4.2.0",
     "expose-loader": "^0.7.3",
+    "file-loader": "^1.1.5",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.29.0",
     "rimraf": "^2.6.1",
@@ -38,11 +40,19 @@
     "tslint": "^5.5.0",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.4.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.3.0",
     "webpack-dashboard": "^0.4.0",
     "webpack-dev-server": "2.5.1"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "@types/jquery": "^3.2.15",
+    "@types/pixi.js": "^4.5.7",
+    "@types/webfontloader": "^1.6.29",
+    "copy-webpack-plugin": "^4.2.0",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "pixi.js": "^4.6.0",
+    "webfontloader": "^1.6.28"
   }
 }

@@ -2,15 +2,16 @@ const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const DashboardPlugin = require("webpack-dashboard/plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
 
 var config = {
   devtool: isProd ? "hidden-source-map" : "source-map",
-  context: path.resolve("./src"),
+  //context: path.resolve("./src/client"),
   entry: {
-    app: "./index.ts",
-    vendor: "./vendor.ts"
+    app: "./src/client/index.ts",
+    vendor: "./src/client/vendor.ts"
   },
   output: {
     path: path.resolve("./dist"),
@@ -29,7 +30,21 @@ var config = {
         use: ["awesome-typescript-loader", "source-map-loader"]
       },
       { test: /\.html$/, loader: "html-loader" },
-      { test: /\.css$/, loaders: ["style-loader", "css-loader"] }
+      { test: /\.css$/, loaders: ["style-loader", "css-loader"] },
+
+      {
+        test: /.*\.(gif|png|jpe?g|svg)$/i,
+        loaders: [
+            "url-loader?limit=1&name=assets/[name]-[hash].[ext]",
+        ],
+      },
+      {
+        test: /.*\.(json|txt|eot|ttf|woff|woff2)$/i,
+        loaders: [
+            "url-loader?limit=1&name=assets/[name]-[hash].[ext]",
+        ],
+        exclude: /node_modules/,
+      }
     ]
   },
   resolve: {
@@ -44,7 +59,7 @@ var config = {
     }),
     new HtmlWebpackPlugin({
       title: "Typescript Webpack Starter",
-      template: "!!ejs-loader!src/index.html"
+      template: "!!ejs-loader!src/client/index.html"
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
@@ -64,14 +79,20 @@ var config = {
           failOnHint: true
         }
       }
-    })
+    }),
+    new CopyWebpackPlugin([{
+      from: 'src/client/assets',
+      to: 'assets'
+    }], {})
   ],
   devServer: {
     contentBase: path.join(__dirname, "dist/"),
     compress: true,
     port: 3000,
     hot: true,
-    inline: true
+    inline: true,
+    open: true,
+    openPage: ""
   }
 };
 
