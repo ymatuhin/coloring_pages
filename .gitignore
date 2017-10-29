@@ -1,5 +1,4 @@
 # Build results
-dist/
 typings/**/*
 
 # Others

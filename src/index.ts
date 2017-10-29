@@ -23,11 +23,12 @@ function fillColor({ x, y }: any) {
   const color = [255, 0, 0, 0];
   const imageData = ctx.getImageData(x, y, 1, 1);
   const isWhite =
-    imageData.data[0] > 200 &&
-    imageData.data[1] > 200 &&
-    imageData.data[2] > 200;
+    imageData.data[0] > 100 &&
+    imageData.data[1] > 100 &&
+    imageData.data[2] > 100;
 
   if (!isWhite) return;
+
   imageData.data[1] = 0;
   imageData.data[2] = 0;
   ctx.putImageData(imageData, x, y);
