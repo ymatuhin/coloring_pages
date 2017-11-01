@@ -1,27 +1,28 @@
-export function getBrightness([r, g, b]) {
+export const findRedIndex = (x, y, width) => y * (width * 4) + x * 4;
+export const generateIndexes = redIndex => ({
+  r: redIndex,
+  g: redIndex + 1,
+  b: redIndex + 2,
+  a: redIndex + 3,
+});
+
+export function getBrightness({ r, g, b }) {
   return (r * 299 + g * 587 + b * 114) / 1000 / 255 * 100;
 }
 
-export function shadeRGBColor([R, G, B], percent) {
+export function shadeRGBColor({ r, g, b }, percent) {
   var t = percent < 0 ? 0 : 255,
     p = percent < 0 ? percent * -1 : percent;
-  return [
-    Math.round((t - R) * p) + R,
-    Math.round((t - G) * p) + G,
-    Math.round((t - B) * p) + B,
-  ];
+  return {
+    r: Math.round((t - r) * p) + r,
+    g: Math.round((t - g) * p) + g,
+    b: Math.round((t - b) * p) + b,
+  };
 }
 
-export const findRedIndex = (x, y, width) => y * (width * 4) + x * 4;
-export const makeIndexesArray = redIndex => [
-  redIndex,
-  redIndex + 1,
-  redIndex + 2,
-  redIndex + 3,
-];
-export const makeRgba = (data, indexes) => [
-  data[indexes[0]],
-  data[indexes[1]],
-  data[indexes[2]],
-  data[indexes[3]],
-];
+export const makeRgba = (data, { r, g, b, a }) => ({
+  r: data[r],
+  g: data[g],
+  b: data[b],
+  a: data[a],
+});

@@ -43,55 +43,52 @@ class App {
     );
 
     this.canvas.addEventListener('click', this.onCanvasClick.bind(this), false);
-    // window.addEventListener('resize', this.onResize.bind(this), false);
   }
-
-  // onResize() {
-  // this.stretchCanvas();
-  // }
 
   onCanvasClick({ layerX, layerY }) {
-    const params = {
-      x: layerX,
-      y: layerY,
-      color: [
-        150 + Math.random() * 100,
-        150 + Math.random() * 100,
-        150 + Math.random() * 100,
-      ],
+    const color = {
+      r: 100 + Math.random() * 150,
+      g: 100 + Math.random() * 150,
+      b: 100 + Math.random() * 150,
     };
-    this.fillArea(params);
+    console.time('fill');
+    this.fillArea(layerX, layerY, color);
+    console.timeEnd('fill');
   }
 
-  fillArea({ x, y, color }) {
+  fillArea(startX, startY, color) {
     const filled = {};
-    const imageW = this.image.width;
-    const imageH = this.image.height;
-    const imageData = this.ctx.getImageData(0, 0, imageW, imageH);
+    const imageWidth = this.image.width;
+    const imageHeight = this.image.height;
+    const imageData = this.ctx.getImageData(0, 0, imageWidth, imageHeight);
 
-    const stack = [[x, y]];
-
+    const stack = [{ x: startX, y: startY }];
     while (stack.length > 0) {
-      const [localX, localY] = stack.pop();
-      if (localX < 0 || localY < 0) continue;
-      if (localX > imageW || localY > imageH) continue;
-      if (filled[`${localX}:${localY}`]) continue;
+      const { x, y } = stack.pop();
+      if (x < 0) continue;
+      if (y < 0) continue;
+      if (x > imageWidth) continue;
+      if (y > imageHeight) continue;
+
+      const filledIndex = x + ':' + y;
+      if (filled[filledIndex]) continue;
 
       const pixel = new Pixel({
-        x: localX,
-        y: localY,
-        image: imageData,
+        x,
+        y,
+        imageWidth,
+        imageData,
         sensitivity: this.sensitivity,
       });
       if (pixel.isBlack() || pixel.isTransparent()) continue;
       pixel.fill(color, this.originalImageData);
 
-      filled[`${localX}:${localY}`] = true;
+      filled[filledIndex] = true;
 
-      stack.push([localX - 1, localY]);
-      stack.push([localX + 1, localY]);
-      stack.push([localX, localY - 1]);
-      stack.push([localX, localY + 1]);
+      stack.push({ x: x - 1, y: y });
+      stack.push({ x: x + 1, y: y });
+      stack.push({ x: x, y: y - 1 });
+      stack.push({ x: x, y: y + 1 });
     }
 
     this.ctx.putImageData(imageData, 0, 0);
