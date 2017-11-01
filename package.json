@@ -1,48 +1,20 @@
 {
-  "name": "typescript-webpack-starter",
-  "version": "0.2.0",
-  "description": "A damn simple starter for Typescript and Webpack",
-  "main": "src/index.ts",
+  "name": "coloring_pages",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "npm run server:dev",
-    "server": "npm run server:dev",
-    "server:dev": "webpack-dashboard -- webpack-dev-server --config ./webpack.config.js --inline --progress --watch --open --hot",
-    "server:prod": "cross-env NODE_ENV=production webpack-dashboard -- webpack-dev-server --config ./webpack.config.js --port 3000 --host 0.0.0.0 --hot --inline --progress --profile --watch --open --content-base dist/",
-    "build": "npm run build:dev",
-    "build:dev": "webpack --config ./webpack.config.js --progress --profile --color --display-error-details --display-cached",
-    "build:prod": "cross-env NODE_ENV=production webpack --config ./webpack.config.js  --progress --profile --color --display-error-details --display-cached --bail",
-    "clean": "npm cache clear && rimraf -- dist",
-    "test": "karma start",
-    "killall:win": "taskkill /f /im node.exe",
-    "killall:macos": "killall node"
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/emyann/typescript-webpack-starter"
+    "url": "git+https://github.com/ymatuhin/coloring_pages.git"
   },
-  "author": "yrenaudin",
+  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@types/lodash": "^4.14.70",
-    "awesome-typescript-loader": "^3.2.1",
-    "cross-env": "^5.0.1",
-    "css-loader": "^0.28.4",
-    "ejs-loader": "^0.3.0",
-    "eslint": "^4.2.0",
-    "expose-loader": "^0.7.3",
-    "html-loader": "^0.4.5",
-    "html-webpack-plugin": "^2.29.0",
-    "rimraf": "^2.6.1",
-    "source-map-loader": "^0.2.1",
-    "style-loader": "^0.18.2",
-    "tslint": "^5.5.0",
-    "tslint-loader": "^3.5.3",
-    "typescript": "^2.4.1",
-    "webpack": "^3.3.0",
-    "webpack-dashboard": "^0.4.0",
-    "webpack-dev-server": "2.5.1"
+  "bugs": {
+    "url": "https://github.com/ymatuhin/coloring_pages/issues"
   },
-  "dependencies": {
-    "lodash": "^4.17.4"
-  }
+  "homepage": "https://github.com/ymatuhin/coloring_pages#readme"
 }
