@@ -1,20 +1,8 @@
 {
   "name": "coloring_pages",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "./src/main.js",
   "scripts": {
-    "start": "live-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ymatuhin/coloring_pages.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ymatuhin/coloring_pages/issues"
-  },
-  "homepage": "https://github.com/ymatuhin/coloring_pages#readme"
+    "start": "npx live-server"
+  }
 }
