@@ -1,0 +1,8 @@
+{
+  "name": "coloring_pages",
+  "version": "1.0.0",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "npx live-server"
+  }
+}
