@@ -2,7 +2,7 @@ import { htmlMarkup, messages } from './config.js';
 import loadImage from './loadImage.js';
 import syncCanvasSize from './syncCanvasSizes.js';
 import drawImageOnCenter from './drawImageOnCenter.js';
-import gpuCalculate from './gpuCalculate.js';
+import gpuCalculate from './gpuCalculate.js?v=2';
 
 class App {
   constructor(config = {}) {
