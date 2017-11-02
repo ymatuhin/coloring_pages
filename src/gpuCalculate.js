@@ -1,5 +1,5 @@
 // 0 – 100
-const getBrightness = (r, g, b) =>
+const getBrightness = ({ r, g, b }) =>
   (r * 299 + g * 587 + b * 114) / 1000 / 255 * 100;
 
 const getRgb = (dataData, pixelPos) => {
@@ -10,13 +10,11 @@ const getRgb = (dataData, pixelPos) => {
   return { r, g, b };
 };
 
-const shadeRGBColor = ({ r, g, b }, percent) => {
-  var t = percent < 0 ? 0 : 255,
-    p = percent < 0 ? percent * -1 : percent;
+const mixColor = (color1, color2) => {
   return {
-    r: Math.round((t - r) * p) + r,
-    g: Math.round((t - g) * p) + g,
-    b: Math.round((t - b) * p) + b,
+    r: Math.round((color1.r + color2.r) / 2),
+    g: Math.round((color1.g + color2.g) / 2),
+    b: Math.round((color1.b + color2.b) / 2),
   };
 };
 
@@ -30,21 +28,17 @@ export default ({
   imageW,
   imageH,
 }) => {
-  const shades = {};
   const stack = [{ x: startX, y: startY }];
-  const newColorBrightness = getBrightness(color.r, color.g, color.b);
+  const newColorBrightness = getBrightness(color);
 
   const colorPixel = pixelPos => {
     let newColor = color;
-    const { r, g, b } = getRgb(originalImageDataData, pixelPos);
-    const originalBrightness = getBrightness(r, g, b);
+    const originalRgb = getRgb(originalImageDataData, pixelPos);
+    const originalBrightness = getBrightness(originalRgb);
 
     if (originalBrightness < newColorBrightness) {
-      const diff = (originalBrightness - newColorBrightness) / 100;
-      newColor = shadeRGBColor(color, diff);
+      newColor = mixColor(color, originalRgb);
     }
-
-    shades[`${newColor.r}${newColor.g}${newColor.b}`] = true;
 
     imageData.data[pixelPos] = newColor.r;
     imageData.data[pixelPos + 1] = newColor.g;
@@ -52,12 +46,33 @@ export default ({
   };
 
   const availiblePixel = pixelPos => {
-    const { r, g, b } = getRgb(imageData.data, pixelPos);
-    const notBlack = getBrightness(r, g, b) >= sensitivity;
-    const notCurrentColor = color.r !== r || color.g !== g || color.b !== b;
-    const notShade = !shades[`${r}${g}${b}`];
+    const originalRgb = getRgb(originalImageDataData, pixelPos);
+    const pixelRgb = getRgb(imageData.data, pixelPos);
+    const black = getBrightness(pixelRgb) <= sensitivity;
+    const currentColor =
+      color.r === pixelRgb.r &&
+      color.g === pixelRgb.g &&
+      color.b === pixelRgb.b;
 
-    return notCurrentColor && notBlack && notShade;
+    const mixedRgb = mixColor(color, originalRgb);
+    const mixedColor =
+      pixelRgb.r === mixedRgb.r &&
+      pixelRgb.g === mixedRgb.g &&
+      pixelRgb.b === mixedRgb.b;
+
+    // console.info(
+    //   `# colors`,
+    //   pixelRgb.r,
+    //   pixelRgb.g,
+    //   pixelRgb.b,
+    //   ' # ',
+    //   mixedRgb.r,
+    //   mixedRgb.g,
+    //   mixedRgb.b,
+    // );
+    // console.info(`# mixedColor`, mixedColor);
+
+    return !currentColor && !black && !mixedColor;
   };
 
   while (stack.length) {
@@ -100,7 +115,5 @@ export default ({
       pixelPos += imageW * 4;
     }
   }
-
-  console.info(`# shades`, Object.keys(shades).length);
   return imageData;
 };

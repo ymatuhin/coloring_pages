@@ -46,12 +46,11 @@ class App {
   }
 
   onCanvasClick({ layerX, layerY }) {
-    // const color = {
-    //   r: 180 + Math.round(Math.random() * 75),
-    //   g: 180 + Math.round(Math.random() * 75),
-    //   b: 180 + Math.round(Math.random() * 75),
-    // };
-    const color = { r: 255, g: 200, b: 250 };
+    const color = {
+      r: 155 + Math.round(Math.random() * 100),
+      g: 155 + Math.round(Math.random() * 100),
+      b: 155 + Math.round(Math.random() * 100),
+    };
 
     console.time('fill');
     this.fillArea(layerX, layerY, color);
