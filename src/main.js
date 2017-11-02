@@ -2,7 +2,7 @@ import { htmlMarkup, messages } from './config.js';
 import loadImage from './loadImage.js';
 import syncCanvasSize from './syncCanvasSizes.js';
 import drawImageOnCenter from './drawImageOnCenter.js';
-import Pixel from './pixel.js';
+import gpuCalculate from './gpuCalculate.js';
 
 class App {
   constructor(config = {}) {
@@ -46,50 +46,34 @@ class App {
   }
 
   onCanvasClick({ layerX, layerY }) {
-    const color = {
-      r: 100 + Math.random() * 150,
-      g: 100 + Math.random() * 150,
-      b: 100 + Math.random() * 150,
-    };
+    // const color = {
+    //   r: 180 + Math.round(Math.random() * 75),
+    //   g: 180 + Math.round(Math.random() * 75),
+    //   b: 180 + Math.round(Math.random() * 75),
+    // };
+    const color = { r: 255, g: 200, b: 250 };
+
     console.time('fill');
     this.fillArea(layerX, layerY, color);
     console.timeEnd('fill');
   }
 
   fillArea(startX, startY, color) {
-    const filled = {};
-    const imageWidth = this.image.width;
-    const imageHeight = this.image.height;
-    const imageData = this.ctx.getImageData(0, 0, imageWidth, imageHeight);
+    const imageW = this.image.width;
+    const imageH = this.image.height;
+    const imageData = this.ctx.getImageData(0, 0, imageW, imageH);
 
-    const stack = [{ x: startX, y: startY }];
-    while (stack.length > 0) {
-      const { x, y } = stack.pop();
-      if (x < 0) continue;
-      if (y < 0) continue;
-      if (x > imageWidth) continue;
-      if (y > imageHeight) continue;
-
-      const filledIndex = x + ':' + y;
-      if (filled[filledIndex]) continue;
-
-      const pixel = new Pixel({
-        x,
-        y,
-        imageWidth,
-        imageData,
-        sensitivity: this.sensitivity,
-      });
-      if (pixel.isBlack() || pixel.isTransparent()) continue;
-      pixel.fill(color, this.originalImageData);
-
-      filled[filledIndex] = true;
-
-      stack.push({ x: x - 1, y: y });
-      stack.push({ x: x + 1, y: y });
-      stack.push({ x: x, y: y - 1 });
-      stack.push({ x: x, y: y + 1 });
-    }
+    gpuCalculate({
+      originalImageDataData: this.originalImageData.data,
+      sensitivity: this.sensitivity,
+      ctx: this.ctx,
+      startX,
+      startY,
+      color,
+      imageData,
+      imageW,
+      imageH,
+    });
 
     this.ctx.putImageData(imageData, 0, 0);
   }
