@@ -12,7 +12,10 @@ export default {
   isDev,
   isProd,
   html: {
-    ejs: {
+    from: `${src}/pages/**/*.ejs`,
+    to: dist,
+    minification: { collapseWhitespace: true, removeComments: true },
+    ejsConfig: {
       data: {
         message: 'test',
       },
@@ -21,9 +24,6 @@ export default {
         ext: '.html',
       },
     },
-    htmlmin: { collapseWhitespace: true, removeComments: true },
-    from: `${src}/**/*.ejs`,
-    to: dist,
   },
   css: {
     from: `${src}/main.scss`,
@@ -48,9 +48,14 @@ export default {
       plugins: isProd ? [new UglifyJSPlugin()] : [],
     },
   },
+  static: {
+    from: `${src}/static/**`,
+    to: dist,
+  },
   watch: {
-    all: `${dist}/**/*.{css,html,js,png,svg,jpg,gif}`,
+    all: `${dist}/**/*`,
     scss: `${src}/**/*.scss`,
     ejs: `${src}/**/*.ejs`,
+    static: `${src}/static/**/*`,
   },
 };

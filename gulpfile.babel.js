@@ -1,20 +1,18 @@
 import gulp from 'gulp';
 import webpack from 'webpack-stream';
+import rimraf from 'rimraf';
 
 const $ = require('gulp-load-plugins')();
 
 import config from './config';
 
-gulp.task('clear', cb => $.rimraf(config.dist, cb));
-
-gulp.task('server', () => {
-  const server = $.liveServer.static(config.dist, 5000);
-  server.start();
-
-  gulp.watch(config.watch.all, file => {
-    server.notify.apply(server, [file]);
-  });
+gulp.task('clean', cb => {
+  rimraf(config.dist, cb);
 });
+
+gulp.task('static', () =>
+  gulp.src(config.static.from).pipe(gulp.dest(config.static.to)),
+);
 
 gulp.task('css', () =>
   gulp
@@ -24,7 +22,8 @@ gulp.task('css', () =>
     .pipe($.if(config.isDev, $.sourcemaps.write()))
     .pipe($.autoprefixer(config.css.prefixes))
     .pipe($.if(config.isProd, $.cssnano()))
-    .pipe(gulp.dest(config.css.to)),
+    .pipe(gulp.dest(config.css.to))
+    .pipe($.connect.reload()),
 );
 
 gulp.task('html', () =>
@@ -32,12 +31,12 @@ gulp.task('html', () =>
     .src(config.html.from)
     .pipe(
       $.ejs(
-        config.html.ejs.data,
-        config.html.ejs.options,
-        config.html.ejs.settings,
+        config.html.ejsConfig.data,
+        config.html.ejsConfig.options,
+        config.html.ejsConfig.settings,
       ).on('error', $.util.log),
     )
-    .pipe($.htmlmin(config.html.htmlmin))
+    .pipe($.htmlmin(config.html.minification))
     .pipe(gulp.dest(config.html.to)),
 );
 
@@ -48,13 +47,26 @@ gulp.task('js', () =>
     .pipe(gulp.dest(config.ts.to)),
 );
 
-gulp.task('watch', cb => {
-  gulp.watch(config.watch.scss, ['css']);
-  gulp.watch(config.watch.ejs, ['html']);
+gulp.task('server', ['build'], () => {
+  $.connect.server({
+    port: 5000,
+    root: 'dist',
+    livereload: true,
+  });
 });
 
-gulp.task('build', ['clear', 'html', 'css', 'js']);
+gulp.task('livereload', ['server'], () =>
+  $.watch(config.watch.all).pipe($.connect.reload()),
+);
+
+gulp.task('watch', ['build'], cb => {
+  gulp.watch(config.watch.scss, ['css']);
+  gulp.watch(config.watch.ejs, ['html']);
+  gulp.watch(config.watch.static, ['static']);
+});
+
+gulp.task('build', ['clean'], () => gulp.start('html', 'css', 'js', 'static'));
 gulp.task('prod', ['build']);
-gulp.task('dev', ['build', 'server', 'watch']);
+gulp.task('dev', ['build', 'server', 'livereload', 'watch']);
 
 gulp.task('default', ['dev']);

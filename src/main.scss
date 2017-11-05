@@ -16,3 +16,10 @@ body {
 canvas {
   display: block;
 }
+
+.canvas-bg {
+  min-width: 640px;
+  min-height: 480px;
+  background: url('/img/bg.jpg');
+  // color: #008;
+}
